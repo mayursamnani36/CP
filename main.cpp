@@ -50,15 +50,40 @@ bool primeArr[1000001] = {false};
 
 vector<lli> primes;
 
+lli fact[1000001];
+
 /****************************************************************************************/
+void sieve() {
+	// O(nlog(log(n)))
+	lli maxN = 1000000;
+	for (lli i = 3 ; i <= maxN ; i += 2) {primeArr[i] = true;}
+	primeArr[2] = true;
+	primes.pb(2);
+	for (lli i = 3 ; i <= maxN ; i += 2) {
+		if (primeArr[i]) {
+			primes.pb(i);
+			for (lli j = i * i ; j <= maxN ; j += i) {primeArr[j] = false;}
+		}
+	}
+}
+
 int main() {
 	GO_GO_GO();
 
 	lli t = 1;
-	cin >> t;
+	// cin >> t;
 	while (t--) {
 		lli i = 0;
-
+		lli n;
+		cin >> n;
+		vector<lli> v(n);
+		fo(i, n) {cin >> v[i];}
+		lli q;
+		cin >> q;
+		while (q--) {
+			lli k;
+			cin >> k;
+		}
 	}
 	BYE_BYE();
 	return 0;
