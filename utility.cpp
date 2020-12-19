@@ -33,7 +33,7 @@ vector<bool> s_sieve(lli m, lli n) {
 			if (i - m >= 0) segment[i - m] = false;
 		}
 	}
-	// for (i = m ; i <= n ; i++) {
+	// for (lli i = m ; i <= n ; i++) {
 	// 		if (segment[i - m] && i != 1) {cout << i << nl;}
 	// }
 	return segment;
