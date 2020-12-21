@@ -57,9 +57,10 @@ int main() {
 	GO_GO_GO();
 
 	lli t = 1;
-	// cin >> t;
+	cin >> t;
 	while (t--) {
 		lli i = 0;
+
 	}
 	BYE_BYE();
 	return 0;

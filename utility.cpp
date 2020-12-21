@@ -39,6 +39,19 @@ vector<bool> s_sieve(lli m, lli n) {
 	return segment;
 }
 
+void d_sieve() {
+	// Don't forget to change primeArr to lli
+	lli maxN = 1000000;
+	primeArr[1] = 1;
+	for (lli i = 2 ; i <= maxN ; i++) {
+		if (primeArr[i] == 0) {
+			for (lli j = i ; j <= maxN ; j += i) {
+				if (primeArr[j] == 0) {primeArr[j] = i;}
+			}
+		}
+	}
+}
+
 lli ETF(lli n) {
 	// Euler Totient Function (no. of no.s from 1 to n which are coprime to n) O(sqrt(n))
 	lli res = n;
