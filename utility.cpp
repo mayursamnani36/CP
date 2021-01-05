@@ -4,8 +4,36 @@
 #include<ext/pb_ds/assoc_container.hpp>
 #include<ext/pb_ds/tree_policy.hpp>
 using namespace __gnu_pbds;
-typedef tree<int, null_type, less<int>, rb_tree_tag, tree_order_statistics_node_update> PBDS;
+typedef tree<int, null_type, less<int>, rb_tree_tag, tree_order_statistics_node_update> ordered_set;
 
+lli getInvCount(vector<lli> &arr) {
+	lli key;
+	ordered_set set1;
+	set1.insert(arr[0]);
+	lli invcount = 0;
+	lli n = arr.size();
+	for (lli i = 1; i < n; i++) {
+		set1.insert(arr[i]);
+		key = set1.order_of_key(arr[i] + 1);
+		invcount += set1.size() - key;
+	}
+	return invcount;
+}
+
+lli findPivot(vector<lli> &arr) {
+	lli s = 0;
+	lli e = arr.size() - 1;
+	if (arr[s] < arr[e]) {return e;}
+	lli m;
+	while (s <= e) {
+
+		m = (s + e) / 2;
+		if ((m < e && arr[m] > arr[m + 1]) || (m > s && arr[m] < arr[m - 1])) {return m;}
+		if (arr[s] >= arr[m]) {e = m - 1;}
+		else {s = m + 1;}
+	}
+	return m;
+}
 
 lli kfib(lli n) {return (pow((1 + sqrt(5)), n) - pow((1 - sqrt(5)), n)) / (sqrt(5) * pow(2, n));}
 
@@ -37,19 +65,6 @@ vector<bool> s_sieve(lli m, lli n) {
 	// 		if (segment[i - m] && i != 1) {cout << i << nl;}
 	// }
 	return segment;
-}
-
-void d_sieve() {
-	// Don't forget to change primeArr to lli
-	lli maxN = 1000000;
-	primeArr[1] = 1;
-	for (lli i = 2 ; i <= maxN ; i++) {
-		if (primeArr[i] == 0) {
-			for (lli j = i ; j <= maxN ; j += i) {
-				if (primeArr[j] == 0) {primeArr[j] = i;}
-			}
-		}
-	}
 }
 
 lli ETF(lli n) {
@@ -176,7 +191,6 @@ lli C(lli n, lli r) {
 	return ((fact[n] * temp1) % mod * temp2 % mod) % mod;
 }
 
-
 // For matrix expo
 vector<vector<lli> > multiply(vector<vector<lli>> A , vector<vector<lli>> B) {
 	vector<vector<lli>> C(n, vector<lli>(n));
@@ -198,3 +212,113 @@ vector<vector<lli> >  pow(vector<vector<lli> > A, lli p) {
 	}
 }
 //matrix expo end
+
+// Segment Tree implementation for min range query and update
+// complete overlap matlab node ki range lies in query ki range
+
+void buildTree(vector<lli> &v, lli ss, lli se, vector<lli>&tree, lli index) {
+	// at a particular index we store min from ss to se
+	if (ss == se) {tree[index] = v[ss]; return;}
+	lli mid = ss + (se - ss) / 2;
+	buildTree(v, ss, mid, tree, 2 * index);
+	buildTree(v, mid + 1, se, tree, 2 * index + 1);
+	tree[index] = min(tree[2 * index], tree[2 * index + 1]);
+	return;
+}
+
+lli query(vector<lli> &tree, lli ss, lli se, lli qs, lli qe, lli index) {
+	// Complete overlap
+	if (ss >= qs && se <= qe) {return tree[index];}
+	// No overlap
+	if (qe < ss || qs > se) {return INT_MAX;}
+	// Partial overlap
+	lli mid = ss + (se - ss) / 2;
+	lli left = query(tree, ss, mid, qs, qe, 2 * index);
+	lli right = query(tree, mid + 1, se, qs, qe, 2 * index + 1);
+	return min(left, right);
+}
+
+void updateNode(vector<lli> &tree, lli ss, lli se, lli i , lli increment, lli index) {
+	// Case i is out of bounds
+	if (i < ss || i > se) {return;}
+	if (ss == se) {tree[index] += increment; return;}
+	lli mid = ss + (se - ss) / 2;
+	updateNode(tree, ss, mid, i, increment, 2 * index);
+	updateNode(tree, mid + 1, se, i, increment, 2 * index + 1);
+	tree[index] = min(tree[2 * index], tree[2 * index + 1]);
+	return;
+}
+
+void updateRange(vector<lli> &tree, lli ss, lli se, lli l, lli r, lli increment, lli index) {
+	//Out of bounds
+	if (l > se || r < ss) {return;}
+	//leaf node (dont put it before out of bounds)
+	if (ss == se) {
+		tree[index] += increment;
+		return;
+	}
+	lli mid = ss + (se - ss) / 2;
+	updateRange(tree, ss, mid, l, r, increment, 2 * index);
+	updateRange(tree, mid + 1, se, l, r, increment, 2 * index + 1);
+	tree[index] = min(tree[2 * index], tree[2 * index + 1]);
+	return;
+}
+
+void updateRangeLazy(vector<lli> &tree, lli ss, lli se, lli l, lli r, lli increment, lli index) {
+	//before going down resolve the value if exists
+	if (lazy[index] != 0) {
+		tree[index] += lazy[index];
+		//non leaf node
+		if (ss != se) {
+			lazy[2 * index] += lazy[index];
+			lazy[2 * index + 1] += lazy[index];
+		}
+		lazy[index] = 0;
+	}
+
+	//no overlap
+	if (l > se || r < ss) {return;}
+
+	//complete overlap
+	if (ss >= l && se <= r) {
+		tree[index] += increment;
+		if (ss != se) {
+			lazy[2 * index] += increment;
+			lazy[2 * index + 1] += increment;
+		}
+		return;
+	}
+
+	lli mid = ss + (se - ss) / 2;
+	updateRangeLazy(tree, ss, mid, l, r, increment, 2 * index);
+	updateRangeLazy(tree, mid + 1, se, l, r, increment, 2 * index + 1);
+	tree[index] = min(tree[2 * index], tree[2 * index + 1]);
+	return;
+}
+
+lli queryLazy(vector<lli> &tree, lli ss, lli se, lli qs, lli qe, lli index) {
+	// resolve the lazy value at current node
+	if (lazy[index] != 0) {
+		tree[index] += lazy[index];
+		//non leaf node
+		if (ss != se) {
+			lazy[2 * index] += lazy[index];
+			lazy[2 * index + 1] += lazy[index];
+		}
+		lazy[index] = 0;
+	}
+
+	// No overlap
+	if (ss > qe || se < qs) {return INT_MAX;} // for range mininum query
+
+	// Complete overlap
+	if (ss >= qs && se <= qe) {return tree[index];}
+
+	lli mid = ss + (se - ss) / 2;
+	lli left = queryLazy(tree, ss, mid, qs, qe , 2 * index);
+	lli right = queryLazy(tree, mid + 1, se, qs, qe, 2 * index + 1);
+	return min(left, right);
+}
+
+
+// Segment tree end
