@@ -203,7 +203,7 @@ vector<vector<lli> > multiply(vector<vector<lli>> A , vector<vector<lli>> B) {
 	}
 	return C;
 }
-vector<vector<lli> >  pow(vector<vector<lli> > A, lli p) {
+vector<vector<lli> > pow(vector<vector<lli> > A, lli p) {
 	if (p == 1) {return A;}
 	if (p & 1) {return multiply(A, pow(A, p - 1));}
 	else {

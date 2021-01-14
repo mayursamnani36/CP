@@ -12,6 +12,7 @@ using namespace std;
 #define pb push_back
 #define ff first
 #define ss second
+#define PI 3.141592653589793238
 
 typedef long long int lli;
 typedef unsigned long long int ulli;
