@@ -20,6 +20,9 @@ lli getInvCount(vector<lli> &arr) {
 	return invcount;
 }
 
+//srand(atoi(argv[1])); put this in main as well
+lli rand(lli a, lli b) {return a + rand() % (b - a + 1);}
+
 lli findPivot(vector<lli> &arr) {
 	lli s = 0;
 	lli e = arr.size() - 1;
@@ -172,6 +175,26 @@ void extendedEuclid(lli a, lli b) {
 	lli cy = solx - (a / b) * soly;
 	solx = cx;
 	soly = cy;
+}
+
+lli CRT(vector<lli> mods, vector<lli> rems) {
+	lli k = mods.size();
+	lli p = 1;
+	lli i;
+	for (i = 0 ; i < k ; i++) {p *= mods[i];}
+	vector<lli> pp(k), inv(k);
+
+	for (i = 0 ; i < k ; i++) {
+		pp[i] = p / mods[i];
+		extendedEuclid(pp[i], mods[i]);
+		inv[i] = (solx + mods[i]) % mods[i];
+	}
+
+	lli ans = 0;
+	for (i = 0 ; i < k ; i++) {
+		ans += ((rems[i] * pp[i] * inv[i]) % p);
+	}
+	return ans % p;
 }
 
 void modfact(int n) {

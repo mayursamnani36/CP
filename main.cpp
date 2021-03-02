@@ -48,11 +48,8 @@ void GO_GO_GO() {
 void BYE_BYE() {cerr << "Time elapsed: " << 1000 * clock() / CLOCKS_PER_SEC << "ms\n";}
 
 bool primeArr[1000001] = {false};
-
 lli fact[1000001];
-
 lli lazy[1000001] = {0};
-
 vector<lli> primes;
 
 /****************************************************************************************/
@@ -62,7 +59,7 @@ int main() {
 	lli t = 1;
 	cin >> t;
 	while (t--) {
-		lli i = 0;
+		lli i = 0, j = 0;
 
 	}
 	BYE_BYE();
