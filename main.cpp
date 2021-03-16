@@ -50,6 +50,7 @@ void BYE_BYE() {cerr << "Time elapsed: " << 1000 * clock() / CLOCKS_PER_SEC << "
 bool primeArr[1000001] = {false};
 lli fact[1000001];
 lli lazy[1000001] = {0};
+lli BIT[1000001] = {0};
 vector<lli> primes;
 
 /****************************************************************************************/

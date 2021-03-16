@@ -214,7 +214,7 @@ lli C(lli n, lli r) {
 	return ((fact[n] * temp1) % mod * temp2 % mod) % mod;
 }
 
-// For matrix expo
+// For matrix expo---------------------------------------------------------------------------
 vector<vector<lli> > multiply(vector<vector<lli>> A , vector<vector<lli>> B) {
 	vector<vector<lli>> C(n, vector<lli>(n));
 	for (int i = 0; i < n; i++) {
@@ -234,9 +234,10 @@ vector<vector<lli> > pow(vector<vector<lli> > A, lli p) {
 		return multiply(X, X);
 	}
 }
-//matrix expo end
+//matrix expo end----------------------------------------------------------------------------
 
-// Segment Tree implementation for min range query and update
+
+// Segment Tree implementation for min range query and update ----------------------------------------------------
 // complete overlap matlab node ki range lies in query ki range
 
 void buildTree(vector<lli> &v, lli ss, lli se, vector<lli>&tree, lli index) {
@@ -344,4 +345,25 @@ lli queryLazy(vector<lli> &tree, lli ss, lli se, lli qs, lli qe, lli index) {
 }
 
 
-// Segment tree end
+// Segment tree end ---------------------------------------------------------------------
+
+
+// Fenwick tree --------------------------------------------------------------------------
+
+void update(lli i, lli inc, lli n) {
+	while (i <= n) {
+		BIT[i] += inc;
+		i += (i & (-i));
+	}
+}
+
+lli query(lli i) {
+	lli sum = 0;
+	while (i > 0) {
+		sum += BIT[i];
+		i -= (i & (-i));
+	}
+	return sum;
+}
+
+// Fenwick tree end --------------------------------------------------------------------------
