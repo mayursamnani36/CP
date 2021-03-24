@@ -20,6 +20,27 @@ lli getInvCount(vector<lli> &arr) {
 	return invcount;
 }
 
+// Numbers whose mask is same when multiplied give perfect square
+lli mask(lli n) {
+	lli ans = 1;
+	lli count = 0;
+	while (n % 2 == 0) {
+		count++;
+		n /= 2;
+	}
+	if (count & 1) {ans *= 2;}
+	for (lli i = 3; i * i <= n; i += 2) {
+		count = 0;
+		while (n % i == 0) {
+			count++;
+			n = n / i;
+		}
+		if (count & 1) {ans *= i;}
+	}
+	if (n > 1) {ans *= n;}
+	return ans;
+}
+
 //srand(atoi(argv[1])); put this in main as well
 lli rand(lli a, lli b) {return a + rand() % (b - a + 1);}
 
