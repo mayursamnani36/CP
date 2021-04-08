@@ -388,3 +388,30 @@ lli query(lli i) {
 }
 
 // Fenwick tree end --------------------------------------------------------------------------
+
+
+//DSU-----------------------------------------------------------------------------------------
+
+// make a parent array with each element as parent of its own i.e parent[i] = i;
+// initialize size array as 1
+
+lli parent[1000001];
+lli size[1000001];
+
+lli find_set(lli v) {
+	if (v == parent[v]) {return v;}
+	return parent[v] = find_set(parent[v]);
+}
+
+void union_sets(lli a, lli b) {
+	a = find_set(a);
+	b = find_set(b);
+	if (a != b) {
+		if (size[a] < size[b]) {swap(a, b);}
+		parent[b] = a;
+		size[a] += size[b];
+	}
+}
+
+
+//DSU end ------------------------------------------------------------------------------------
