@@ -218,9 +218,9 @@ lli CRT(vector<lli> mods, vector<lli> rems) {
 	return ans % p;
 }
 
-void modfact(int n) {
+void modfact(lli n) {
 	fact[0] = 1;
-	for (int i = 1 ; i <= n; i++)
+	for (lli i = 1 ; i <= n; i++)
 		fact[i] = (fact[i - 1] * i) % mod;
 }
 
@@ -396,7 +396,7 @@ lli query(lli i) {
 // initialize size array as 1
 
 lli parent[1000001];
-lli size[1000001];
+lli sz[1000001];
 
 lli find_set(lli v) {
 	if (v == parent[v]) {return v;}
@@ -407,11 +407,36 @@ void union_sets(lli a, lli b) {
 	a = find_set(a);
 	b = find_set(b);
 	if (a != b) {
-		if (size[a] < size[b]) {swap(a, b);}
+		if (sz[a] < sz[b]) {swap(a, b);}
 		parent[b] = a;
-		size[a] += size[b];
+		sz[a] += sz[b];
 	}
 }
 
 
 //DSU end ------------------------------------------------------------------------------------
+
+void dijkstra(vector<vector<plli>> &adj, vector<lli> &dist, vector<bool> &vis, lli start) {
+	set<plli> st;
+	dist[start] = 0;
+	st.insert({0, start});
+	while (st.size()) {
+		plli p = *st.begin();
+		st.erase(st.begin());
+		lli dis = p.ff;
+		lli node = p.ss;
+		vis[node] = true;
+		for (auto nbr : adj[node]) {
+			lli target = nbr.ff;
+			lli tempdist = nbr.ss;
+			if (dis + tempdist < dist[target]) {
+				auto f = st.find({dist[target], target});
+				if (f != st.end()) {
+					st.erase(f);
+				}
+				dist[target] = dis + tempdist;
+			}
+			if (!vis[target])st.insert({dist[target], target});
+		}
+	}
+}

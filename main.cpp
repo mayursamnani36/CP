@@ -7,6 +7,7 @@ using namespace std;
 #define all(x) x.begin(), x.end()
 #define sortall(x) sort(all(x))
 #define tr(it, a) for(auto it = a.begin(); it != a.end(); it++)
+#define si(a) ((lli)(a).size())
 #define nl "\n"
 #define mod 1000000007
 #define pb push_back
