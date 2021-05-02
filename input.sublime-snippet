@@ -1,0 +1,10 @@
+<snippet>
+	<content><![CDATA[
+lli n;
+cin >> n;
+vector<lli> v(n);
+fo(i, n) cin >> v[i];
+]]></content>
+	<tabTrigger>input</tabTrigger>
+	<scope>source.c++</scope>
+</snippet>
