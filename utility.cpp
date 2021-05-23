@@ -235,6 +235,15 @@ lli C(lli n, lli r) {
 	return ((fact[n] * temp1) % mod * temp2 % mod) % mod;
 }
 
+// binomial coeff
+vector<vector<lli>> nCr(61, vector<lli>(61, 0));
+for (int i = 0; i < 61; i++) {
+	for (int j = 0; j <= i; j++) {
+		if (i == j || j == 0) {nCr[i][j] = 1;}
+		else {nCr[i][j] = nCr[i - 1][j - 1] + nCr[i - 1][j];}
+	}
+}
+
 // For matrix expo---------------------------------------------------------------------------
 vector<vector<lli> > multiply(vector<vector<lli>> A , vector<vector<lli>> B) {
 	vector<vector<lli>> C(n, vector<lli>(n));
