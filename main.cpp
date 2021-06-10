@@ -67,3 +67,11 @@ int main() {
 	BYE_BYE();
 	return 0;
 }
+
+/*
+Think reverse
+Think DP
+Think Graph
+Check i++ i--
+Read question again
+*/

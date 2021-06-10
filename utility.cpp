@@ -426,6 +426,8 @@ void union_sets(lli a, lli b) {
 //DSU end ------------------------------------------------------------------------------------
 
 void dijkstra(vector<vector<plli>> &adj, vector<lli> &dist, vector<bool> &vis, lli start) {
+	// adj is node -> node, dis
+	// st is dist, node
 	set<plli> st;
 	dist[start] = 0;
 	st.insert({0, start});
@@ -448,4 +450,43 @@ void dijkstra(vector<vector<plli>> &adj, vector<lli> &dist, vector<bool> &vis, l
 			if (!vis[target])st.insert({dist[target], target});
 		}
 	}
+}
+
+void floydWarshall(vector<vector<lli>> &adjMat) {
+	lli n = adjMat.size();
+	lli i, j, k;
+	//Phases, in kth phase we included vertices (1, 2 ... k) as intermediate vertex
+	for (k = 0 ; k < n ; k++) {
+		//Iterate over entire matrix
+		for (i = 0 ; i < n ; i++) {
+			for (j = 0 ; j < n ; j++) {
+				adjMat[i][j] = min(adjMat[i][j], adjMat[i][k] + adjMat[k][j]);
+			}
+		}
+	}
+}
+
+vector<lli> bellmanFord(lli n, lli src, vector<vector<lli>> &edgeList) {
+	vector<lli> dist(n + 1, INT_MAX);
+	dist[src] = 0;
+
+	// relax all edges n-1 times
+	for (lli i = 0 ; i < n - 1 ; i++) {
+		for (auto edge : edgeList) {
+			lli u = edge[0];
+			lli v = edge[1];
+			lli wt = edge[2];
+			if (dist[u] != INT_MAX && dist[u] + wt < dist[v]) {dist[v] = dist[u] + wt;}
+		}
+	}
+
+	// for -ve wt cycle
+	for (auto edge : edgeList) {
+		lli u = edge[0];
+		lli v = edge[1];
+		lli wt = edge[2];
+		if (dist[u] != INT_MAX && dist[u] + wt < dist[v]) {return {};}
+	}
+
+	return dist;
 }
