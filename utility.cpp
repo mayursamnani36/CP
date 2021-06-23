@@ -1,3 +1,11 @@
+# Stay calm
+# Think reverse
+# Think DP
+# Think Graph
+# Check i++ i--
+# Read question again
+# Think digit by digit
+
 //order_by_key gives the lower bound of the given element find_by_order gives iterator to
 //the position of the element so * it to get the position. If elements are not distinct
 //use pair<int, int> instead of int and make second value unique
@@ -403,6 +411,7 @@ lli query(lli i) {
 
 // make a parent array with each element as parent of its own i.e parent[i] = i;
 // initialize size array as 1
+fo(i, n + 1) {parent[i] = i; sz[i] = 1;}
 
 lli parent[1000001];
 lli sz[1000001];
@@ -420,6 +429,16 @@ void union_sets(lli a, lli b) {
 		parent[b] = a;
 		sz[a] += sz[b];
 	}
+}
+
+// for finding different connected componenets
+set<lli> st;
+for (i = 1 ; i <= n ; i++) {
+	lli temp = i;
+	while (parent[temp] != temp) {
+		temp = parent[temp];
+	}
+	st.insert(parent[temp]);
 }
 
 
