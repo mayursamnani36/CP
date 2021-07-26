@@ -444,6 +444,8 @@ for (i = 1 ; i <= n ; i++) {
 
 //DSU end ------------------------------------------------------------------------------------
 
+// Shortest paths ---------------------------------------------------------------------------
+
 void dijkstra(vector<vector<plli>> &adj, vector<lli> &dist, vector<bool> &vis, lli start) {
 	// adj is node -> node, dis
 	// st is dist, node
@@ -509,3 +511,64 @@ vector<lli> bellmanFord(lli n, lli src, vector<vector<lli>> &edgeList) {
 
 	return dist;
 }
+// Shortest paths end -----------------------------------------------------------------------
+
+
+// Euler tour things ------------------------
+
+void euler_tour(lli cur, lli par) {
+	// vector<lli> tin(N), tout(N);
+	// timer = 0;
+
+	// Enter the node
+	tin[cur] = ++timer;
+	for (auto nbr : adj[cur]) {
+		if (nbr != par) {
+			euler_tour(nbr, cur);
+		}
+	}
+	//Leave the node
+	tout[cur] = timer;
+	return;
+}
+
+// check if node x is in subree of y
+
+bool check(lli x, lli y) {
+	return tin[x] >= tin[y] && tout[x] <= tout[y];
+}
+
+// Euler tour end----------------------------
+
+// Art points and bridges--------------------
+
+vector<lli> disc(N, 0), low(N);
+set<int> art_p;
+vector<plli> bridge;
+lli tme = 1;
+
+void dfs(lli cur, lli par) {
+	disc[cur] = low[cur] = tme++;
+	lli no_child = 0;
+	for (auto child : adj[cur]) {
+		//not visited
+		if (disc[child] == 0) {
+			dfs(child, cur);
+			no_child++;
+			low[cur] = min(low[cur], low[child]);
+			//art point
+			if (par != -1 && low[child] >= disc[cur]) {art_p.insert(cur);}
+			// bridge
+			if (low[child] > disc[cur]) {bridge.pb({cur, child});}
+		}
+		else if (child != par) {
+			// backedge
+			// cycle found
+			low[cur] = min(low[cur], disc[child]);
+		}
+	}
+	// seperate case for root as art point
+	if (par == -1 && no_child >= 2) {art_p.insert(cur);}
+	return;
+}
+
